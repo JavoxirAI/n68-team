@@ -1,0 +1,53 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block title %}About us{% endblock %}
+{% block body-params %}id="about-us" class="blog"{% endblock %}
+{% block content %}
+	<div class="main-content">
+			<div id="wrapper-site">
+				<div id="content-wrapper">
+
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-bg">
+						<div class="container no-index">
+							<div class="breadcrumb">
+								<ol>
+									<li>
+										<a href="#">
+											<span>Home</span>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<span>About us</span>
+										</a>
+									</li>
+								</ol>
+							</div>
+						</div>
+					</nav>
+					<div id="main">
+						<div class="page-home">
+							<div class="container">
+								<div class="about-us-content">
+
+									<h1 class="title-page">About Us</h1>
+									<div class="row">
+										{% for a in about %}
+										<div class="col-lg-6 col-md-6 col-sm-6 right">
+											<a href="{% url 'pages:about' %}">
+												<img class="img-fluid" src="{{ a.image.url }}" alt="" />
+											</a>
+											<p class="bio">{{ a.bio|safe }}
+											</p>
+										</div>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}
