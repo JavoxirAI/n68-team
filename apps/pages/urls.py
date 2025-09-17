@@ -1,13 +1,13 @@
 from django.urls import path
 
-from apps.pages.views import home_page_view, contact_page_view, n404_page_view, about_us_page_view, user_wishlist_page_view
+from apps.pages.views import UserWishlistPageView, AboutUsPageView, NotFoundPageView, ContactPageView, HomePageView
 
 app_name = 'pages'
 
 urlpatterns = [
-    path('user-wishlist/', user_wishlist_page_view, name='user-wishlist'),
-    path('about-us/', about_us_page_view, name='about'),
-    path('404/', n404_page_view, name='404'),
-    path('contact/', contact_page_view, name='contact'),
-    path('', home_page_view, name='home')
+    path('user-wishlist/', UserWishlistPageView.as_view(), name='user-wishlist'),
+    path('about-us/', AboutUsPageView, name='about'),
+    path('404/', NotFoundPageView.as_view(), name='404'),
+    path('contact/', ContactPageView.as_view(), name='contact'),
+    path('', HomePageView.as_view(), name='home')
 ]

@@ -1,41 +1,41 @@
-from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
 
 from apps.pages.forms import ContactForm
 from apps.pages.models import AboutPageModel
 
 
-def home_page_view(request):
-    return render(request, 'home.html')
+class HomePageView(TemplateView):
+    template_name = 'home.html'
 
-def contact_page_view(request):
-    if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('pages:contact')
-        else:
-            errors = []
-            for key, value in form.errors.items():
-                for error in value:
-                    errors.append(error)
-            context = {
-                "errors": errors
-            }
-            return render(request, 'pages/contact.html', context)
 
-    else:
-        return render(request, 'pages/contact.html')
+class ContactPageView(FormView):
+    template_name = 'pages/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('pages:contact')
 
-def n404_page_view(request):
-    return render(request, 'pages/404.html')
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
 
-def about_us_page_view(request):
-    about = AboutPageModel.objects.all()
+    def form_invalid(self, form):
+        errors = []
+        for key, value in form.errors.items():
+            for error in value:
+                errors.append(error)
+        return self.render_to_response(self.get_context_data(errors=errors))
 
-    context = {
-        'about': about,
-    }
-    return render(request, 'pages/about-us.html', context)
 
-def user_wishlist_page_view(request):
-    return render(request, 'pages/user-wishlist.html')
+class NotFoundPageView(TemplateView):
+    template_name = 'pages/404.html'
+
+
+class AboutUsPageView(ListView):
+    model = AboutPageModel
+    template_name = 'pages/about-us.html'
+    context_object_name = 'about'
+
+
+class UserWishlistPageView(TemplateView):
+    template_name = 'pages/user-wishlist.html'
